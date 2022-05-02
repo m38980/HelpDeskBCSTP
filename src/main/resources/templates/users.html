@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Gestão de Users</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css"
+		rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+	<style>
+		#btnEdit {
+			color: darkorange;
+			font-size: 30px;
+		}
+
+		#deleteButton {
+			color: red;
+			font-size: 30px;
+		}
+
+		#btnAdicionar {
+			font-size: 30px;
+			color:  #d4af37;
+
+		}
+
+		#btnHome {
+			font-size: 30px;
+			color:  #d4af37;
+		}
+
+		#btnPrint {
+			font-size: 30px;
+			color:  #d4af37;
+		}
+
+		#btnSearch {
+
+			color:  #d4af37;
+			border: 0px;
+			background-color: transparent;
+			font-size: 30px;
+		}
+
+		#btnClear {
+
+			color: red;
+			border: 0px;
+			background-color: transparent;
+			font-size: 30px;
+			margin-right: 1280px;
+		}
+
+		#h1 {
+			text-align: center;
+		}
+
+		.table-responsive {
+			display: table;
+		}
+
+		#totalUser {
+			margin-left: 630px;
+		}
+		#thead{
+			background-color:#d4af37;
+			color: white;
+			font-weight: bold;
+		}
+	</style>
+
+	<div class="table-responsive">
+
+		<div class="row">
+			<br />
+		</div>
+		<h1 style="text-align: center;">Listagem de Utilizadores</h1>
+		<br />
+
+		<table class="table table-striped table-bordered thead-dark table-responsive-md">
+
+			<thead id="thead">
+				<tr>
+					<th>ID</th>
+					<th>Username</th>
+					<th>Password</th>
+					<th>E-mail</th>
+					<th>Status</th>
+					<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Ação</th>
+				</tr>
+			</thead>
+
+			<tbody id="myTable">
+				&nbsp &nbsp;
+				<a id="btnAdicionar" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN')" class="material-icons"
+					href="/users/novo" title="Adiconar Utilizador" role="button">person_add_alt</a>
+				&nbsp &nbsp;
+				<a id="btnHome" class="material-icons" href="/" role="button" title="Menu Principal">home</a>
+				&nbsp; &nbsp;
+				<a th:href="@{/users/users/export/pdf}" class="material-icons" id="btnPrint"
+					title="Exportar PDF">print</a>
+				
+				<br /><br />
+				<nav class="navbar navbar-light bg-light">
+					<form class="form-inline" th:action="@{/users}">
+						<input class="form-control mr-sm-2" name="keyword" id="keyword" size="50" th:value="${keyword}"
+							required placeholder="Filtrar Utilizadores......">
+
+						<button class="material-icons" id="btnSearch" type="text" value="Search">search</button>
+						<button class="material-icons" type="button" value="Clear" id="btnClear"
+							onclick="clearSearch()">clear</button>
+					</form>
+				</nav>
+
+				<div class="center" style="text-align: center;">
+					Total Utilizadores: [[${totalItems}]] - Page [[${currentPage}]] de [[${totalPages}]]
+					&nbsp; - &nbsp;
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/users/page/' + ${i}}">[[${i}]]</a>&nbsp;&nbsp;
+						<span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+					</span>
+				</div>
+				
+				<br />
+				
+				<tr th:each="user: ${listUsers}">
+			
+					<td th:text="${user.id}"></td>
+					<td th:text="${user.username}"></td>
+					<td th:text="${user.password}"></td>
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.enabled}"></td>
+
+
+					<td>
+						<a id="btnEdit" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')" class="material-icons"
+							title="Editar" th:href="@{'/users/edit/' + ${user.id}}" role="button">mode_edit</a>
+
+						<a sec:authorize="hasAuthority('ADMIN')" class="material-icons" id="deleteButton"
+							title="Excluir" th:href="@{'/users/delete/' + ${user.id}}" role="button"><span
+								id="spanDelete">
+								delete</span></a>
+					</td>
+				</tr>
+				</tr>
+			</tbody>
+
+		</table>
+		<footer class="panel-footer" style="text-align: center;">
+
+		</footer>
+
+	</div>
+
+	<!--  BEGIN Modal Delete Record -->
+
+	<div id="deleteModal" class="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Confirmação!</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Deseja realmente Excluir o Utilizador?</p>
+				</div>
+				<div class="modal-footer">
+					<a href="" class="btn btn-success" id="delRef">Sim, Excluir</a>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--  END Modal Delete Record -->
+
+	<!--  BEGIN Script Filtrar User -->
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#myInput").on("keyup", function () {
+				var value = $(this).val().toLowerCase();
+				$("#myTable tr").filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+		});
+	</script>
+
+	<!--  END Script Filtrar User -->
+
+
+	<!--  BEGIN Script Limpar pesquisa User -->
+
+	<script type="text/javascript">
+		function clearSearch() {
+			window.location = "[[@{/users}]]";
+		}
+	</script>
+
+	<!--  END Script Limpar pesquisa User -->
+
+	<!--  BEGIN Script Delete User -->
+
+	<script type="text/javascript">
+		$('.table #deleteButton').on('click', function (event) {
+			event.preventDefault();
+			var href = $(this).attr('href');
+			$('#deleteModal #delRef').attr('href', href);
+			$('#deleteModal').modal();
+		});
+	</script>
+
+	<!--  END Script Delete User -->
+
+</body>
+
+</html>

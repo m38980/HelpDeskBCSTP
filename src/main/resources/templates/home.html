@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>HelpDesk - BCSTP</title>
+
+	<!-- Bootstrap -->
+	<!--        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+		integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+	<!--        <link href="dist/css/bootstrap-navbar-dropdowns.min.css" rel="stylesheet">-->
+	<link
+		href="https://cdn.jsdelivr.net/gh/fontenele/bootstrap-navbar-dropdowns@5.0.2/dist/css/bootstrap-navbar-dropdowns.min.css"
+		rel="stylesheet">
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<br />
+</head>
+
+<body>
+
+	<style>
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+			background-image: url("../images/helpdesk.jpeg");
+			background-repeat: no-repeat;
+			background-size: 100%
+		}
+
+		img {
+			margin-top: -35px;
+		}
+
+		ul li {
+			position: relative;
+			display: inline-block;
+			border-radius: 5px;
+			background-color: #EEE;
+			box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+			transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+		}
+
+		ul li:hover {
+			background-color: #fff;
+			opacity: 1;
+		}
+
+		ul li:hover::after {
+			opacity: 1;
+		}
+
+		span {
+			margin-right: 10px;
+		}
+
+		.logado {
+			margin-left: 800px;
+			margin-top: 5px;
+		}
+
+
+
+		#power {
+			color: red;
+			margin-top: 10px;
+		}
+
+		#home {
+			color: #d4af37;
+			font-size: 40px;
+		}
+
+		#clientes {
+			color: #d4af37;
+			font-size: 40px;
+
+		}
+
+		#meter {
+			color: #d4af37;
+			font-size: 40px;
+
+		}
+
+		#user {
+			color: #d4af37;
+			font-size: 40px;
+
+		}
+	</style>
+
+	<div class="">
+
+		<!-- Static navbar -->
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+						aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+						<span style="color: #d4af37;"> HelpDesk - BCSTP </span> <img alt="" src="../images/logo_bcstp.png" width="50px">
+					</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="/" class="material-icons" id="home" title="Home Page">home</a></li>
+						<li><a href="/students/getAll" class="material-icons" id="clientes" title="Painel de Chamados">phone_in_talk</a></li>
+						<li><a href="/funcionarios/getAll" class="material-icons" id="meter" title="Painel Colaboradores">groups</a></li>
+						<li><a href="/users" class="material-icons" id="user" title="Painel Admin">admin_panel_settings</a></li>
+					</ul>
+					<div class="logado" sec:authorize="isAuthenticated()">&nbsp &nbsp &nbsp &nbsp
+						&nbsp &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+						Benvindo: <b style="color: blue;"><span sec:authentication="name"></span></b>
+						&nbsp; Perfil: &nbsp;&nbsp;&nbsp;<b style="color: blue;"><span sec:authentication="principal.authorities">Roles</span>  </b>
+						&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp;
+
+						<form th:action="@{/logout}" 
+						      title="Sair" 
+						      method="post" 
+						      th:hidden="true" 
+						      name="logoutForm">
+							<input type="submit" value="Logout" />logout
+						</form>
+							<a  class="material-icons" id="power" title="Logout"
+								href="javascript: document.logoutForm.submit()">settings_power</a>
+					</div>
+					<ul class="nav navbar-nav navbar-right">
+					</ul>
+
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+			<!--/.container-fluid -->
+		</nav>
+
+		<!-- Main component for a primary marketing message or call to action 
+
+		
+			
+		<div style="width: 100%">
+		<iframe width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+		src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=pt&amp;q=+(GeoMeter)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+		<a href="https://www.gps.ie/golf-gps/">golf course gps</a></iframe></div>	
+			
+			-->
+
+	</div>
+	<!-- /container -->
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<!--        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>-->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+		integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+		crossorigin="anonymous"></script>
+
+	<script
+		src="https://cdn.jsdelivr.net/gh/fontenele/bootstrap-navbar-dropdowns@5.0.2/dist/js/bootstrap-navbar-dropdowns.min.js"></script>
+	<script>
+		$('.navbar').navbarDropdown({
+			theme: 'bs3',
+			trigger: 'mouseover'
+		});
+	</script>
+</body>
+
+</html>
